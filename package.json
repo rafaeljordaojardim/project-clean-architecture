@@ -1,0 +1,12 @@
+{
+  "name": "project-clean-architecture",
+  "version": "1.0.0",
+  "description": "The idea of this project is learn about clean architecture",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
