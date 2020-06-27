@@ -4,11 +4,11 @@
   "description": "The idea of this project is learn about clean architecture",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "lint-staged": {
     "*.js": [
-      "standard --fix", 
+      "standard --fix",
       "git add"
     ]
   },
@@ -22,6 +22,7 @@
   "license": "ISC",
   "devDependencies": {
     "husky": "^4.2.5",
+    "jest": "^26.1.0",
     "lint-staged": "^10.2.11",
     "standard": "^14.3.4"
   }
