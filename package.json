@@ -4,7 +4,8 @@
   "description": "The idea of this project is learn about clean architecture",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll",
+    "test:staged": "jest"
   },
   "standard": {
     "env": ["jest"]
