@@ -1,14 +1,18 @@
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 const AuthUseCase = require('./auth-usecase')
-
-const makeSut = () => {
+const makeEncrypter = () => {
   class EncrypterSpy {
     async compare (password, hashedPassword) {
       this.password = password
       this.hashedPassword = hashedPassword
+      return this.isValid
     }
   }
   const encrypterSpy = new EncrypterSpy()
+  encrypterSpy.isValid = true
+  return encrypterSpy
+}
+const makeLoadUserByEmailRepository = () => {
   class LoadUserByEmailRepositorySpy {
     async load (email) {
       this.email = email
@@ -16,10 +20,16 @@ const makeSut = () => {
     }
   }
   const loadUserByEmailRepositorySpy = new LoadUserByEmailRepositorySpy()
-  const sut = new AuthUseCase(loadUserByEmailRepositorySpy, encrypterSpy)
   loadUserByEmailRepositorySpy.user = {
     password: 'hashed_password'
   }
+  return loadUserByEmailRepositorySpy
+}
+const makeSut = () => {
+  const encrypterSpy = makeEncrypter()
+  const loadUserByEmailRepositorySpy = makeLoadUserByEmailRepository()
+  const sut = new AuthUseCase(loadUserByEmailRepositorySpy, encrypterSpy)
+
   return {
     sut,
     loadUserByEmailRepositorySpy,
@@ -58,13 +68,15 @@ describe(('Auth Use Case'), () => {
   })
 
   test('Should return null if email is invalid returns null', async () => {
-    const { sut } = makeSut()
+    const { sut, loadUserByEmailRepositorySpy } = makeSut()
+    loadUserByEmailRepositorySpy.user = null
     const accessToken = await sut.auth('invalid_email@anyemail.com', 'any_password')
     expect(accessToken).toBe(null)
   })
 
-  test('Should return null if email is invalid returns null', async () => {
-    const { sut, loadUserByEmailRepositorySpy } = makeSut()
+  test('Should return null if password is invalid returns null', async () => {
+    const { sut, loadUserByEmailRepositorySpy, encrypterSpy } = makeSut()
+    encrypterSpy.isValid = false
     loadUserByEmailRepositorySpy.user = null
     const accessToken = await sut.auth('valid_email@anyemail.com', 'invalid_password')
     expect(accessToken).toBe(null)
