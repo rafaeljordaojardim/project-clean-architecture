@@ -86,6 +86,12 @@ describe(('Auth Use Case'), () => {
     expect(promise).rejects.toThrow(new InvalidParamError('loadUserByEmailRepository'))
   })
 
+  test('Should throw if no dependency is provided', async () => {
+    const sut = new AuthUseCase({ loadUserByEmailRepository: {} })
+    const promise = sut.auth('any_email@anyemail.com', 'any_password')
+    expect(promise).rejects.toThrow(new InvalidParamError('loadUserByEmailRepository'))
+  })
+
   test('Should return null if email is invalid returns null', async () => {
     const { sut, loadUserByEmailRepositorySpy } = makeSut()
     loadUserByEmailRepositorySpy.user = null
