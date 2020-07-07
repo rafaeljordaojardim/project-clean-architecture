@@ -5,7 +5,7 @@ module.exports = {
     this.dbName = dbName
     this.client = await MongoClient.connect(url, {
       userNewUrlParser: true,
-      userUnifiedTopology: true
+      useUnifiedTopology: true
     })
     this.db = this.client.db(dbName)
   },
